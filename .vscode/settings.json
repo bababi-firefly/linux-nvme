@@ -2,7 +2,14 @@
     "files.associations": {
         "blkdev.h": "c",
         "typeinfo": "c",
-        "memory_resource": "cpp"
+        "memory_resource": "cpp",
+        "array": "c",
+        "deque": "c",
+        "string": "c",
+        "unordered_map": "c",
+        "vector": "c",
+        "string_view": "c",
+        "initializer_list": "c"
     },
     "codegraphy.connectionType": "Interaction",
     "codegraphy.nodeSize": "Lines",

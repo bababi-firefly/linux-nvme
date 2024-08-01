@@ -123,7 +123,7 @@ struct nvme_dev {
 	unsigned int num_vecs;
 	u32 q_depth;
 	int io_sqes;
-	u32 db_stride;
+	u32 db_stride; // 门铃寄存器步幅
 	void __iomem *bar;
 	unsigned long bar_mapped_size;
 	struct work_struct remove_work;
@@ -953,6 +953,7 @@ out_free_cmd:
 	return ret;
 }
 
+// 释放nvme_iod内各种分配的资源
 static void nvme_pci_complete_rq(struct request *req)
 {
 	struct nvme_iod *iod = blk_mq_rq_to_pdu(req);
@@ -968,6 +969,7 @@ static void nvme_pci_complete_rq(struct request *req)
 }
 
 /* We read the CQE phase first to check if the rest of the entry is valid */
+// 检查是否有未处理的cqe
 static inline bool nvme_cqe_pending(struct nvme_queue *nvmeq)
 {
 	struct nvme_completion *hcqe = &nvmeq->cqes[nvmeq->cq_head];
@@ -981,7 +983,9 @@ static inline void nvme_ring_cq_doorbell(struct nvme_queue *nvmeq)
 
 	if (nvme_dbbuf_update_and_check_event(head, nvmeq->dbbuf_cq_db,
 					      nvmeq->dbbuf_cq_ei))
-		writel(head, nvmeq->q_db + nvmeq->dev->db_stride);
+		//如果需要，它将更新 NVMe 设备的门铃寄存器，以通知 NVMe 控制器完成队列中的
+		//新条目已经处理完毕。这对于确保主机和 NVMe 控制器之间的高效通信和同步非常重要
+		writel(head, nvmeq->q_db/*队列门铃寄存器基地址*/ + nvmeq->dev->db_stride);
 }
 
 static inline struct blk_mq_tags *nvme_queue_tagset(struct nvme_queue *nvmeq)
@@ -1046,6 +1050,7 @@ static inline int nvme_process_cq(struct nvme_queue *nvmeq)
 {
 	int found = 0;
 
+	// 如果有未处理的cqe
 	while (nvme_cqe_pending(nvmeq)) {
 		found++;
 		/*

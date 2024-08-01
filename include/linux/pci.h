@@ -605,12 +605,13 @@ struct pci_bus_resource {
 
 #define PCI_REGION_FLAG_MASK	0x0fU	/* These bits of resource flags tell us the PCI region flags */
 
+// 是用来描述pci桥的
 struct pci_bus {
 	struct list_head node;		/* Node in list of buses */
 	struct pci_bus	*parent;	/* Parent bus this bridge is on */
 	struct list_head children;	/* List of child buses */
 	struct list_head devices;	/* List of devices on this bus */
-	struct pci_dev	*self;		/* Bridge device as seen by parent */
+	struct pci_dev	*self;		/* Bridge device as seen by parent */ // 被上游当做一个pci设备使用
 	struct list_head slots;		/* List of slots on this bus;
 					   protected by pci_slot_mutex */
 	struct resource *resource[PCI_BRIDGE_RESOURCE_NUM];
