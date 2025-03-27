@@ -442,7 +442,7 @@ static int pci_device_probe(struct device *dev)
 static int pci_device_remove(struct device *dev)
 {
 	struct pci_dev *pci_dev = to_pci_dev(dev);
-	struct pci_driver *drv = pci_dev->driver;123
+	struct pci_driver *drv = pci_dev->driver;
 
 	if (drv) {
 		if (drv->remove) {

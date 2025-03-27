@@ -2883,7 +2883,8 @@ static struct nvme_dev *nvme_pci_alloc_dev(struct pci_dev *pdev,
 	struct nvme_dev *dev;
 	int ret = -ENOMEM;
 	// 步骤2: 在所在node上分配内存
-	dev = kzalloc_node(sizeof(*dev), GFP_KERNEL, node);
+	dev = l
+	(sizeof(*dev), GFP_KERNEL, node);
 	if (!dev)
 		return ERR_PTR(-ENOMEM);
 	INIT_WORK(&dev->ctrl.reset_work, nvme_reset_work);

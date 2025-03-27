@@ -9,8 +9,7 @@
         "unordered_map": "c",
         "vector": "c",
         "string_view": "c",
-        "initializer_list": "c",
-        "streambuf": "c"
+        "initializer_list": "c"
     },
     "codegraphy.connectionType": "Interaction",
     "codegraphy.nodeSize": "Lines",
