@@ -4619,13 +4619,13 @@ int nvme_init_ctrl(struct nvme_ctrl *ctrl, struct device *dev,
 
 	BUILD_BUG_ON(NVME_DSM_MAX_RANGES * sizeof(struct nvme_dsm_range) >
 			PAGE_SIZE);
-	ctrl->discard_page = alloc_page(GFP_KERNEL);
+	ctrl->discard_page = alloc_page(GFP_KERNEL); // 为Trim命令分配需要的一个page，用来缓存trim命令中的元数据信息
 	if (!ctrl->discard_page) {
 		ret = -ENOMEM;
 		goto out;
 	}
 
-	ret = ida_simple_get(&nvme_instance_ida, 0, 0, GFP_KERNEL);
+	ret = ida_simple_get(&nvme_instance_ida, 0, 0, GFP_KERNEL); // 获取内核中一个唯一的标识符，nvme_instance_ida用来管理nvme设备的ID分配
 	if (ret < 0)
 		goto out;
 	ctrl->instance = ret;
